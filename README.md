@@ -20,7 +20,7 @@ const client = new BolsilloArgentoAPIClient(BASE_URL);
 
 ## API
 
-### `getOrders(status?: OrderStatus, headers?: Record<string, string>): Promise<Order[]>`
+### `getOrders(status?: OrderStatus, headers?: Record<string, string>): Promise<OrderResponse>`
 
 Fetches a list of orders with an optional status filter.
 
@@ -31,9 +31,9 @@ Fetches a list of orders with an optional status filter.
 
 **Returns:**
 
-- A promise that resolves to an array of `Order` objects.
+- A promise that resolves to an `OrderResponse` object.
 
-### `getOrderById(id: string, headers?: Record<string, string>): Promise<Order>`
+### `getOrderById(id: string, headers?: Record<string, string>): Promise<OrderResponse>`
 
 Fetches an order by its ID.
 
@@ -44,9 +44,9 @@ Fetches an order by its ID.
 
 **Returns:**
 
-- A promise that resolves to an `Order` object.
+- A promise that resolves to an `OrderResponse` object.
 
-### `createOrder(order: CreateOrderRequest, headers?: Record<string, string>): Promise<Order>`
+### `createOrder(order: CreateOrderRequest, headers?: Record<string, string>): Promise<OrderResponse>`
 
 Creates a new order.
 
@@ -57,7 +57,7 @@ Creates a new order.
 
 **Returns:**
 
-- A promise that resolves to the created `Order` object.
+- A promise that resolves to the created `OrderResponse` object.
 
 ### `takeOrder(order: TakeOrderRequest, headers?: Record<string, string>): Promise<Order>`
 
@@ -71,6 +71,19 @@ Takes an order.
 **Returns:**
 
 - A promise that resolves to the taken `Order` object.
+
+### `createUser(user: CreateUserRequest, headers?: Record<string, string>): Promise<Order>`
+
+Creates a new user.
+
+**Parameters:**
+
+- `user`: The user details.
+- `headers` (optional): Additional headers to include in the request.
+
+**Returns:**
+
+- A promise that resolves to the created `Order` object.
 
 ### `updateOrder(updateRequest: UpdateOrderRequest, headers?: Record<string, string>): Promise<Order>`
 
