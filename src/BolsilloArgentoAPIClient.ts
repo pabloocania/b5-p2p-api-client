@@ -85,9 +85,9 @@ class BolsilloArgentoAPIClient {
         return this.post<OrderResponse>(url, order, headers);
     }
 
-    public async takeOrder(order: TakeOrderRequest, headers?: Record<string, string>): Promise<Order> {
+    public async takeOrder(order: TakeOrderRequest, headers?: Record<string, string>): Promise<OrderResponse> {
         const url = '/api/orders/take';
-        return this.post<Order>(url, order, headers);
+        return this.post<OrderResponse>(url, order, headers);
     }
 
     public async createUser(user: CreateUserRequest, headers?: Record<string, string>): Promise<Order> {
