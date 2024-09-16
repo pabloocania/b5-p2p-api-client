@@ -6,7 +6,7 @@ A TypeScript client for the Bolsillo Argento API.
 
 You can install the package via npm:
 
-`npm install bolsillo-argento-api-client`
+`npm install ba-api-client@0.0.1 `
 
 ## Usage
 
