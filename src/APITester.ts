@@ -3,6 +3,7 @@ import BolsilloArgentoAPIClient from './BolsilloArgentoAPIClient';
 import { CreateOrderRequest, CreateUserRequest, OrderStatus, TakeSellOrderRequest, UpdateOrderRequest } from './types';
 
 const BASE_URL = 'https://bolsillo-argento-586dfd80364d.herokuapp.com'; // Replace with your actual base URL
+// const BASE_URL = 'http://localhost:8080'; // Replace with your actual base URL
 const client = new BolsilloArgentoAPIClient(BASE_URL);
 
 async function runTest(testFunction: () => Promise<void>) {
@@ -27,7 +28,7 @@ async function testHealthCheck() {
 }
 
 async function testGetOrders() {
-    const response = await client.getOrders('WAITING_PAYMENT' as OrderStatus);
+    const response = await client.getOrders({ status: 'PENDING' });
     console.log('Orders:', response)
 }
 
@@ -128,4 +129,4 @@ async function runTests() {
 
 }
 
-runTests();
+// runTests();

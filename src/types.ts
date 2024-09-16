@@ -68,6 +68,12 @@ export interface CreateOrderRequest {
     creatorId?: string;
 }
 
+export interface GetOrdersParams {
+    status?: OrderStatus;
+    user?: string;
+    buyer?: string;
+}
+
 export type TakeOrderRequest = TakeSellOrderRequest | TakeBuyOrderRequest;
 
 export interface TakeSellOrderRequest {

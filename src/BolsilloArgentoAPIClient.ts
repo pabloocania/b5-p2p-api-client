@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { CreateOrderRequest, CreateUserRequest, Order, OrderResponse, OrderStatus, TakeOrderRequest, UpdateOrderRequest } from './types';
+import { CreateOrderRequest, CreateUserRequest, GetOrdersParams, Order, OrderResponse, OrderStatus, TakeOrderRequest, UpdateOrderRequest } from './types';
 import { isPlainObject, camelCase, snakeCase, transform } from 'lodash';
 
 class BolsilloArgentoAPIClient {
@@ -70,8 +70,14 @@ class BolsilloArgentoAPIClient {
         }
     }
 
-    public async getOrders(status?: OrderStatus, headers?: Record<string, string>): Promise<OrderResponse> {
-        const url = status ? `/api/orders?status=${status}` : '/api/orders';
+    public async getOrders(props: GetOrdersParams, headers?: Record<string, string>): Promise<OrderResponse> {
+        const { status, user, buyer } = props;
+        const params = new URLSearchParams();
+        if (status) params.append('status', status);
+        if (user) params.append('user', user);
+        if (buyer) params.append('buyer', buyer);
+
+        const url = `/api/orders?${params.toString()}`;
         return this.get<OrderResponse>(url, headers);
     }
 
