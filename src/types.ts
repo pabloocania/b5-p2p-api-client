@@ -69,7 +69,7 @@ export interface CreateOrderRequest {
 }
 
 export interface GetOrdersParams {
-    status?: OrderStatus;
+    status?: OrderStatus[];
     user?: string;
     buyer?: string;
 }
@@ -98,4 +98,38 @@ export interface CreateUserRequest {
 export interface UpdateOrderRequest {
     status: string;
     orderId: string;
+}
+
+export interface OrderLockedEvent {
+    type: string;
+    orderId: string;
+    buyerAddress: string;
+    amount?: string;
+    transaction?: {
+        hash: string;
+    };
+    tokenContractAddress: string;
+    buyerHash: string;
+    sellerAddress: string;
+    sellerHash: string;
+    fee: string;
+    timestamp: string;
+}
+
+
+export interface ReleaseOrderEvent {
+    type: string;
+    orderId: string;
+    buyerAddress: string;
+    amount: string;
+    transaction: {
+        hash: string;
+    };
+    tokenContractAddress: string;
+    adminAction: boolean;
+    timestamp: string;
+}
+
+export interface TestEventParams {
+
 }

@@ -28,7 +28,7 @@ async function testHealthCheck() {
 }
 
 async function testGetOrders() {
-    const response = await client.getOrders({ status: 'PENDING' });
+    const response = await client.getOrders({ status: ['PENDING'] });
     console.log('Orders:', response)
 }
 

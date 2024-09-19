@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { CreateOrderRequest, CreateUserRequest, GetOrdersParams, Order, OrderResponse, OrderStatus, TakeOrderRequest, UpdateOrderRequest } from './types';
+import { CreateOrderRequest, CreateUserRequest, GetOrdersParams, Order, OrderLockedEvent, OrderResponse, OrderStatus, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest } from './types';
 import { isPlainObject, camelCase, snakeCase, transform } from 'lodash';
 
 class BolsilloArgentoAPIClient {
@@ -73,7 +73,7 @@ class BolsilloArgentoAPIClient {
     public async getOrders(props: GetOrdersParams, headers?: Record<string, string>): Promise<OrderResponse> {
         const { status, user, buyer } = props;
         const params = new URLSearchParams();
-        if (status) params.append('status', status);
+        if (status) params.append('status', status.join(','));
         if (user) params.append('user', user);
         if (buyer) params.append('buyer', buyer);
 
@@ -104,6 +104,57 @@ class BolsilloArgentoAPIClient {
     public async updateOrder(updateRequest: UpdateOrderRequest, headers?: Record<string, string>): Promise<Order> {
         const url = '/api/orders/update';
         return this.post<Order>(url, updateRequest, headers);
+    }
+
+    public async testLockFunds(order: Order, testParams?: TestEventParams, headers?: Record<string, string>) {
+        const orderEvent: OrderLockedEvent = {
+            type: "LOCKED",
+            orderId: order.id ?? "",
+            buyerAddress: order.buyerAddress ?? "",
+            amount: order.amount?.toString() ?? "0",
+            transaction: {
+                hash: "0x976d8c61b958e286d907a2e1c5ffde8c9316800ab4de1396a54927a39dc533a2",
+            },
+            tokenContractAddress: "0xee5e8291b551603a19ef41eea69ae49592ed14f8",
+            buyerHash:
+                "02809d5cc2ec09a7503ef77358654a5bfc958e08c04ecb33f412884c0933be68",
+            sellerAddress: "0x2A4E89D18C2742FEDC65444d339cC5fAF3dE4dF1",
+            sellerHash:
+                "4b3560738b8e3cb8a0a30ac664b12de2ace977c62ade94bc08a37fe5b93bf34b",
+            fee: "30000000000000000",
+            timestamp: new Date().toISOString(),
+        };
+
+        const url = "api/events/simulate/lock"
+        try {
+            await this.post<undefined>(url, orderEvent, headers);
+        } catch (error) {
+            console.error("Error locking funds:", error);
+            throw new Error("Failed to lock funds");
+        }
+    }
+
+    public async testReleaseFunds(order: Order, testParams?: TestEventParams, headers?: Record<string, string>) {
+        const releaseOrderEvent: OrderReleasedEvent = {
+            type: "RELEASED",
+            orderId: order.id ?? "",
+            buyerAddress: order.buyerAddress ?? "",
+            amount: order.amount?.toString() ?? "0",
+            transaction: {
+                hash: "0xeab4797bf0e13dff0bda481503a544698127c5f97dd826c465ebdb41bcfec3f5",
+            },
+            tokenContractAddress: "0xee5e8291b551603a19ef41eea69ae49592ed14f8",
+            adminAction: true,
+            timestamp: new Date().toISOString(),
+        };
+
+        const url = "api/events/simulate/release"
+        try {
+            await this.post<undefined>(url, releaseOrderEvent, headers);
+        } catch (error) {
+            console.error("Error releasing funds:", error);
+            throw new Error("Failed to release funds");
+        }
     }
 
 }
