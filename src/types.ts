@@ -32,7 +32,9 @@ export interface Order {
     minFiatAmount?: string;
     creatorId?: string;
     sellerId?: string;
+    sellerUsername?: string;
     buyerId?: string;
+    buyerUsername?: string;
     buyerAddress?: string;
     status?: OrderStatus;
     tokenCode?: string;
@@ -66,6 +68,7 @@ export interface CreateOrderRequest {
     priceMargin?: number;
     walletAddress?: string;
     creatorId?: string;
+    creatorUsername?: string;
 }
 
 export interface GetOrdersParams {
@@ -82,6 +85,7 @@ export interface TakeSellOrderRequest {
     userId: string;
     buyerAddress?: string;
     fiatAmount?: string;
+    username?: string;
 }
 
 export interface TakeBuyOrderRequest {
@@ -89,6 +93,7 @@ export interface TakeBuyOrderRequest {
     orderId: string;
     userId: string;
     amount: string;
+    username?: string;
 }
 
 export interface CreateUserRequest {
