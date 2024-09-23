@@ -1,7 +1,7 @@
 export type OrderType = 'SELL' | 'BUY';
 
 export type OrderStatus =
-    'WAITING_DEPOSIT' |
+    'WAITING_PAYMENT' |
     'WAITING_BUYER_ADDRESS' |
     'PENDING' |
     'ACTIVE' |
