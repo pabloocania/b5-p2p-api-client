@@ -1,21 +1,21 @@
-# Bolsillo Argento API Client
+# P2P stablecoin marketplace
 
-A TypeScript client for the Bolsillo Argento API.
+Peer 2 Peer stablecoin marketplace
 
 ## Installation
 
 You can install the package via npm:
 
-`npm install ba-api-client@0.0.1 `
+`npm install b5-api-client@0.0.1 `
 
 ## Usage
 
-First, import and initialize the `BolsilloArgentoAPIClient`:
+First, import and initialize the `P2PMarketplaceAPIClient`:
 
 ```typescript
-import { BolsilloArgentoAPIClient } from "bolsillo-argento-api-client";
+import { P2PMarketplaceAPIClient } from "b5-api-client";
 const BASE_URL = "https://bolsillo-argento-586dfd80364d.herokuapp.com";
-const client = new BolsilloArgentoAPIClient(BASE_URL);
+const client = new P2PMarketplaceAPIClient(BASE_URL);
 ```
 
 ## API

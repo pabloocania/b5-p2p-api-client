@@ -1,8 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { CreateOrderRequest, CreateUserRequest, GetOrdersParams, Order, OrderLockedEvent, OrderResponse, OrderStatus, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest } from './types';
+import { CreateOrderRequest, CreateUserRequest, GetOrdersParams, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest } from './types';
 import { isPlainObject, camelCase, snakeCase, transform } from 'lodash';
 
-class BolsilloArgentoAPIClient {
+class P2PMarketplaceAPIClient {
     private readonly client: AxiosInstance;
     private readonly defaultHeaders: Record<string, string>;
 
@@ -181,4 +181,4 @@ function toCamelCase(obj: any): any {
     return obj;
 }
 
-export default BolsilloArgentoAPIClient;
+export default P2PMarketplaceAPIClient;

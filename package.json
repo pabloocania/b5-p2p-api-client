@@ -1,7 +1,7 @@
 {
-  "name": "ba-api-client",
-  "version": "0.0.2",
-  "description": "A client for the Bolsillo Argento API",
+  "name": "b5-api-client",
+  "version": "0.0.1",
+  "description": "Escrow Backend API client",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
