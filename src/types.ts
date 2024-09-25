@@ -17,10 +17,13 @@ export type OrderStatus =
     'COMPLETED_BY_ADMIN';
 
 
-export interface PaymentMethod {
-    type: string;
-    username: string;
-}
+    export interface PaymentMethod {
+        type: string; //bank or fintech
+        alias: string;
+        cbu: string;
+        fullName: string;
+        entity: string; //name of the bank or fintech
+    }
 
 export interface Order {
     type: OrderType;
@@ -50,8 +53,11 @@ export interface OrderResponse {
 }
 
 export interface PaymentMethod {
-    type: string;
-    username: string;
+    type: string; //bank or fintech
+    alias: string;
+    cbu: string;
+    fullName: string;
+    entity: string; //name of the bank or fintech
 }
 
 export interface CreateOrderRequest {
