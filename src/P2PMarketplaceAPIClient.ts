@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { CreateOrderRequest, CreateUserRequest, GetOrdersParams, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest } from './types';
+import { CreateOrderRequest, CreateUserRequest, GetOrdersParams, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse } from './types';
 import { isPlainObject, camelCase, snakeCase, transform } from 'lodash';
 
 class P2PMarketplaceAPIClient {
@@ -155,6 +155,26 @@ class P2PMarketplaceAPIClient {
             console.error("Error releasing funds:", error);
             throw new Error("Failed to release funds");
         }
+    }
+
+    public async releaseFunds(order: Order, testParams?: TestEventParams, headers?: Record<string, string>): Promise<string> {
+        const body = {
+            orderId: order.id ?? "",
+            isAdmin: true
+        };
+
+        const url = "api/orders/release"
+        try {
+            return await this.post<string>(url, body, headers);
+        } catch (error) {
+            console.error("Error releasing funds:", error);
+            throw new Error("Failed to release funds");
+        }
+    }
+
+    public async getTransactionStatus(txHash: string, headers?: Record<string, string>): Promise<TransactionStatusResponse> {
+        const url = `/api/blockchain/transactions/${txHash}`;
+        return this.get<TransactionStatusResponse>(url, headers);
     }
 
 }

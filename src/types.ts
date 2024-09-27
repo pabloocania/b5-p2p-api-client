@@ -22,6 +22,12 @@ export interface PaymentMethod {
     username: string;
 }
 
+export interface TransactionStatusResponse {
+    hash: string;
+    block_number: number | null;
+    status: 'PENDING' | 'SUCCESSFULL' | 'FAILED';
+}
+
 export interface Order {
     type: OrderType;
     id?: string;
