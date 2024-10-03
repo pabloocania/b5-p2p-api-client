@@ -16,6 +16,11 @@ export type OrderStatus =
     'EXPIRED' |
     'COMPLETED_BY_ADMIN';
 
+export interface TransactionStatusResponse {
+    hash: string;
+    block_number: number | null;
+    status: 'PENDING' | 'SUCCESSFULL' | 'FAILED';
+}
 
 export interface Order {
     type: OrderType;
