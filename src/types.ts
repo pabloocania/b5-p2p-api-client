@@ -16,12 +16,6 @@ export type OrderStatus =
     'EXPIRED' |
     'COMPLETED_BY_ADMIN';
 
-
-export interface PaymentMethod {
-    type: string;
-    username: string;
-}
-
 export interface TransactionStatusResponse {
     hash: string;
     block_number: number | null;
@@ -56,8 +50,11 @@ export interface OrderResponse {
 }
 
 export interface PaymentMethod {
-    type: string;
-    username: string;
+    type: string; //bank or fintech
+    alias: string;
+    cbu: string;
+    fullName: string;
+    entity: string; //name of the bank or fintech
 }
 
 export interface CreateOrderRequest {
@@ -100,6 +97,7 @@ export interface TakeBuyOrderRequest {
     userId: string;
     amount: string;
     username?: string;
+    paymentMethod?: PaymentMethod[];
 }
 
 export interface CreateUserRequest {
