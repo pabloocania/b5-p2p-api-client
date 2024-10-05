@@ -50,11 +50,11 @@ export interface OrderResponse {
 }
 
 export interface PaymentMethod {
-    type: string; //bank or fintech
-    alias: string;
-    cbu: string;
-    fullName: string;
-    entity: string; //name of the bank or fintech
+    type: string;
+    alias?: string;
+    cbu?: string;
+    fullName?: string;
+    entity?: string;
 }
 
 export interface CreateOrderRequest {
@@ -107,6 +107,11 @@ export interface CreateUserRequest {
 export interface UpdateOrderRequest {
     status: string;
     orderId: string;
+    sellerId?: string;
+    takenAt?: string;
+    isLocked?: boolean;
+    txLock?: string;
+    txRelease?: string;
 }
 
 export interface OrderLockedEvent {

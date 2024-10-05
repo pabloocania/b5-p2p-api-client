@@ -54,7 +54,7 @@ async function testCreateOrder() {
         paymentMethods: [
             {
                 type: 'MERCADO_PAGO',
-                username: 'blas'
+                alias: 'blas'
             }
         ],
         creatorId: '7b74abef-f1b2-4431-aa95-ce565893d47c'
