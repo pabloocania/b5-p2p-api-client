@@ -40,9 +40,11 @@ export interface Order {
     tokenCode?: string;
     fiatAmount?: string;
     fiatCode: string;
-    paymentMethod?: PaymentMethod[];
+    paymentMethods?: PaymentMethod[];
     createdAt?: string; // ISO 8601 string
     transaction?: string;
+    buyerHash?: string;
+    sellerHash?: string;
 }
 
 export interface OrderResponse {
@@ -72,6 +74,8 @@ export interface CreateOrderRequest {
     walletAddress?: string;
     creatorId?: string;
     creatorUsername?: string;
+    buyerHash?: string;
+    sellerHash?: string;
 }
 
 export interface GetOrdersParams {
@@ -89,6 +93,7 @@ export interface TakeSellOrderRequest {
     buyerAddress?: string;
     fiatAmount?: string;
     username?: string;
+    hash?: string;
 }
 
 export interface TakeBuyOrderRequest {
@@ -97,7 +102,8 @@ export interface TakeBuyOrderRequest {
     userId: string;
     amount: string;
     username?: string;
-    paymentMethod?: PaymentMethod[];
+    paymentMethods?: PaymentMethod[];
+    hash?: string;
 }
 
 export interface CreateUserRequest {
