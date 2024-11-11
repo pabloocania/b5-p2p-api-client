@@ -14,7 +14,8 @@ export type OrderStatus =
     'PAID_HOLD_INVOICE' |
     'CANCELED_BY_ADMIN' |
     'EXPIRED' |
-    'COMPLETED_BY_ADMIN';
+    'COMPLETED_BY_ADMIN' |
+    'WAITNG_ESCROW_LOCK';
 
 
 export interface PaymentMethod {
