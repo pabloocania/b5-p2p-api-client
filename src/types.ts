@@ -3,6 +3,9 @@ export type OrderType = 'SELL' | 'BUY';
 export type OrderStatus =
     'WAITING_PAYMENT' |
     'WAITING_BUYER_ADDRESS' |
+    'WAITING_APPROVE' |
+    'APPROVED' |
+    'WAITING_ESCROW' |
     'PENDING' |
     'ACTIVE' |
     'FIAT_SENT' |
@@ -14,8 +17,7 @@ export type OrderStatus =
     'PAID_HOLD_INVOICE' |
     'CANCELED_BY_ADMIN' |
     'EXPIRED' |
-    'COMPLETED_BY_ADMIN' |
-    'WAITNG_ESCROW_LOCK';
+    'COMPLETED_BY_ADMIN';
 
 export interface TransactionStatusResponse {
     hash: string;
