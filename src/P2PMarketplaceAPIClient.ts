@@ -107,7 +107,7 @@ class P2PMarketplaceAPIClient {
     }
 
     public async rateUser(rateUserRequest: RateUserRequest, headers?: Record<string, string>): Promise<any> {
-        const url = '/users/rate';
+        const url = '/api/users/rate';
         return this.post<any>(url, rateUserRequest, headers);
     }
 
