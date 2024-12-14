@@ -1,11 +1,12 @@
 {
   "name": "b5-api-client",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Escrow Backend API client",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
+    "link": "npm link b5-api-client",
     "test:api": "ts-node ./src/APITester.ts"
   },
   "dependencies": {

@@ -48,6 +48,11 @@ export interface Order {
     transaction?: string;
     buyerHash?: string;
     sellerHash?: string;
+    isLocked?: boolean;
+    txLock?: string;
+    txRelease?: string;
+    buyerHasRated: boolean,
+    sellerHasRated: boolean
 }
 
 export interface OrderResponse {
@@ -121,6 +126,12 @@ export interface UpdateOrderRequest {
     isLocked?: boolean;
     txLock?: string;
     txRelease?: string;
+}
+
+export interface RateUserRequest {
+    userId: string;
+    rating: number;
+    orderId: string;
 }
 
 export interface OrderLockedEvent {

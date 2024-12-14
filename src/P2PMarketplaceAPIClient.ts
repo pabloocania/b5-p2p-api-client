@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { CreateOrderRequest, CreateUserRequest, GetOrdersParams, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse } from './types';
+import { CreateOrderRequest, CreateUserRequest, GetOrdersParams, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest } from './types';
 import { isPlainObject, camelCase, snakeCase, transform } from 'lodash';
 
 class P2PMarketplaceAPIClient {
@@ -104,6 +104,11 @@ class P2PMarketplaceAPIClient {
     public async updateOrder(updateRequest: UpdateOrderRequest, headers?: Record<string, string>): Promise<Order> {
         const url = '/api/orders/update';
         return this.post<Order>(url, updateRequest, headers);
+    }
+
+    public async rateUser(rateUserRequest: RateUserRequest, headers?: Record<string, string>): Promise<any> {
+        const url = '/users/rate';
+        return this.post<any>(url, rateUserRequest, headers);
     }
 
     public async testLockFunds(order: Order, testParams?: TestEventParams, headers?: Record<string, string>) {
