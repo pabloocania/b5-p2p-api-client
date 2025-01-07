@@ -164,6 +164,16 @@ export interface ReleaseOrderEvent {
     timestamp: string;
 }
 
+export interface OrderEvent {
+    order_id: string;
+    timestamp: string;
+    event_type: string;
+}
+
+export interface OrderEventsResponse {
+    order_events: OrderEvent[];
+}
+
 export interface TestEventParams {
 
 }

@@ -1,6 +1,6 @@
 {
   "name": "b5-api-client",
-  "version": "0.0.9",
+  "version": "0.0.11",
   "description": "Escrow Backend API client",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
