@@ -179,6 +179,10 @@ export interface PushNotificationsRegisterRequest {
     userId: string;
 }
 
+export interface ConfigResponse<T = any> {
+    config: T;
+}
+
 export interface TestEventParams {
 
 }
