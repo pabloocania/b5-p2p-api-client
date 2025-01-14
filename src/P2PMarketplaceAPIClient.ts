@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { CreateOrderRequest, CreateUserRequest, GetOrdersParams, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse } from './types';
+import { CreateOrderRequest, CreateUserRequest, GetOrdersParams, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest } from './types';
 import { isPlainObject, camelCase, snakeCase, transform } from 'lodash';
 
 class P2PMarketplaceAPIClient {
@@ -111,9 +111,9 @@ class P2PMarketplaceAPIClient {
         return this.post<any>(url, rateUserRequest, headers);
     }
 
-    public async getOrderEvents(orderId: string, headers?: Record<string, string>): Promise<OrderEventsResponse> {
-        const url = `/api/events/order/${orderId}`;
-        return this.get<OrderEventsResponse>(url, headers);
+    public async registerPushToken(registerRequest: PushNotificationsRegisterRequest, headers?: Record<string, string>): Promise<any> {
+        const url = `/api/notifications/register-push`;
+        return this.post<PushNotificationsRegisterRequest>(url, registerRequest, headers);
     }
 
     public async testLockFunds(order: Order, testParams?: TestEventParams, headers?: Record<string, string>) {

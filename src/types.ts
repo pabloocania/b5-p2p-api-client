@@ -174,6 +174,11 @@ export interface OrderEventsResponse {
     order_events: OrderEvent[];
 }
 
+export interface PushNotificationsRegisterRequest {
+    token: string;
+    userId: string;
+}
+
 export interface TestEventParams {
 
 }
