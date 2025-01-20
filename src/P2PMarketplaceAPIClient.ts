@@ -121,6 +121,11 @@ class P2PMarketplaceAPIClient {
         return await this.get<ConfigResponse<T>>(url);
     }
 
+    public async getOrderEvents(id: string, headers?: Record<string, string>): Promise<OrderEventsResponse> {
+        const url = `/api/events/order/${id}`;
+        return this.get<OrderEventsResponse>(url, headers);
+    }
+
     public async testLockFunds(order: Order, testParams?: TestEventParams, headers?: Record<string, string>) {
         const orderEvent: OrderLockedEvent = {
             type: "LOCKED",

@@ -165,13 +165,13 @@ export interface ReleaseOrderEvent {
 }
 
 export interface OrderEvent {
-    order_id: string;
+    orderId: string;
     timestamp: string;
-    event_type: string;
+    eventType: string;
 }
 
 export interface OrderEventsResponse {
-    order_events: OrderEvent[];
+    orderEvents: OrderEvent[];
 }
 
 export interface PushNotificationsRegisterRequest {
