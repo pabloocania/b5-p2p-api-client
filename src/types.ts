@@ -51,8 +51,12 @@ export interface Order {
     isLocked?: boolean;
     txLock?: string;
     txRelease?: string;
-    buyerHasRated: boolean,
-    sellerHasRated: boolean
+    buyerHasRated: boolean;
+    sellerHasRated: boolean;
+    availableBlockchains?: string[];
+    blockchain?: string;
+    creatorRating: string;
+    transactionsCount: number;
 }
 
 export interface OrderResponse {
