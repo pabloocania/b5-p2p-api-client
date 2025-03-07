@@ -57,6 +57,7 @@ export interface Order {
     blockchain?: string;
     creatorRating: string;
     transactionsCount: number;
+    chatId: string;
 }
 
 export interface OrderResponse {
