@@ -184,6 +184,46 @@ export interface PushNotificationsRegisterRequest {
     userId: string;
 }
 
+export interface DashboardMetricsResponse {
+    dashboardMetrics: DashboardMetrics;
+}
+
+export interface DashboardMetrics {
+    volumeTx: BlockchainVolumes[];
+    ordersPerBlockchain: OrdersPerBlockchain[];
+    ordersCompletedTx: number; // Total number of completed orders
+    feesCollected: FeeCollected[]; // Assuming this is defined elsewhere
+    durationInEscrowPerOrder: ReleasedOrderDuration[]; // Assuming this is defined elsewhere
+}
+
+export interface BlockchainVolumes {
+    blockchainName: string;
+    volumes: TokenAmount;
+}
+
+export interface TokenAmount {
+    tokenCode: string;
+    amount: string; // Assuming Amount is defined elsewhere
+}
+
+export interface OrdersPerBlockchain {
+    blockchainName: string;
+    completedOrders: number;
+}
+
+export interface FeeCollected {
+    blockchainName: string;
+    fees: TokenAmount[]
+}
+
+export interface ReleasedOrderDuration {
+    orderId: string
+    blockchain: string
+    lockedAt: string
+    releasedAt: string
+    duration: number
+}
+
 export interface ConfigResponse<T = any> {
     config: T;
 }
