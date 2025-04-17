@@ -85,6 +85,7 @@ async function testTakeOrder() {
 
 async function testCreateUser() {
     const user: CreateUserRequest = {
+        id: "123",
         username: "username_test"
     }
     const response = await client.createUser(user);

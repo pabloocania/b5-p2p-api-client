@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { CreateOrderRequest, CreateUserRequest, GetOrdersParams, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse } from './types';
+import { CreateOrderRequest, CreateUserRequest, GetOrdersParams, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, KioscoinUser, UsersResponse } from './types';
 import { isPlainObject, camelCase, snakeCase, transform } from 'lodash';
 
 class P2PMarketplaceAPIClient {
@@ -96,14 +96,19 @@ class P2PMarketplaceAPIClient {
         return this.post<OrderResponse>(url, order, headers);
     }
 
-    public async createUser(user: CreateUserRequest, headers?: Record<string, string>): Promise<Order> {
-        const url = '/api/users';
-        return this.post<Order>(url, user, headers);
-    }
-
     public async updateOrder(updateRequest: UpdateOrderRequest, headers?: Record<string, string>): Promise<Order> {
         const url = '/api/orders/update';
         return this.post<Order>(url, updateRequest, headers);
+    }
+
+    public async createUser(user: CreateUserRequest, headers?: Record<string, string>): Promise<UsersResponse> {
+        const url = '/api/users';
+        return this.post<UsersResponse>(url, user, headers);
+    }
+
+    public async getUser(userId: string, headers?: Record<string, string>): Promise<UsersResponse> {
+        const url = `/api/users/${userId}`;
+        return this.get<UsersResponse>(url, headers);
     }
 
     public async rateUser(rateUserRequest: RateUserRequest, headers?: Record<string, string>): Promise<any> {

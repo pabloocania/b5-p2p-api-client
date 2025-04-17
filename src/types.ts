@@ -58,10 +58,15 @@ export interface Order {
     creatorRating: string;
     transactionsCount: number;
     chatId: string;
+    userMetrics?: UserMetrics[];
 }
 
 export interface OrderResponse {
     orders: Order[]
+}
+
+export interface UsersResponse {
+    users: KioscoinUser[]
 }
 
 export interface PaymentMethod {
@@ -120,6 +125,7 @@ export interface TakeBuyOrderRequest {
 }
 
 export interface CreateUserRequest {
+    id: string;
     username: string;
 }
 
@@ -230,4 +236,39 @@ export interface ConfigResponse<T = any> {
 
 export interface TestEventParams {
 
+}
+
+export interface UserMetrics {
+    userId: string;
+    avgTimeToLock: number;
+    avgTimeToRelease: number;
+    avgTimeToFiatSent: number;
+}
+
+export interface UserReview {
+    reviewId?: string;
+    rating?: number;
+    reviewedAt?: string;
+}
+
+export interface KioscoinUser {
+    id?: string;
+    username?: string;
+    lang?: string;
+    tradesCompleted?: number;
+    totalReviews?: number;
+    lastRating: string;
+    totalRating: string;
+    volumeTraded?: number;
+    admin?: boolean;
+    banned?: boolean;
+    showUsername?: boolean;
+    showVolumeTraded?: boolean;
+    lightningAddress?: string;
+    disputes?: number;
+    defaultCommunityId?: string;
+    timeToLock?: number;
+    timeToRelease?: number;
+    timeToFiatSent?: number;
+    reviews?: UserReview[];
 }
