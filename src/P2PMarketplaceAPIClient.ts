@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { CreateOrderRequest, CreateUserRequest, GetOrdersParams, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, KioscoinUser, UsersResponse } from './types';
+import { CreateOrderRequest, CreateUserRequest, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, KioscoinUser, UsersResponse, PaymentMethod, GetOrdersParams } from './types';
 import { isPlainObject, camelCase, snakeCase, transform } from 'lodash';
 
 class P2PMarketplaceAPIClient {
@@ -71,11 +71,32 @@ class P2PMarketplaceAPIClient {
     }
 
     public async getOrders(props: GetOrdersParams, headers?: Record<string, string>): Promise<OrderResponse> {
-        const { status, user, buyer } = props;
+        const {
+            status,
+            user,
+            orderType,
+            blockchain,
+            tokenCode,
+            paymentMethods,
+            fiatCode,
+            fiatAmountRange,
+            dateRange,
+            search
+        } = props;
+
         const params = new URLSearchParams();
         if (status) params.append('status', status.join(','));
         if (user) params.append('user', user);
-        if (buyer) params.append('buyer', buyer);
+        if (orderType) params.append('type', orderType.join(','));
+        if (blockchain) params.append('blockchains', blockchain.join(','));
+        if (tokenCode) params.append('tokens', tokenCode.join(','));
+        if (paymentMethods) params.append('payments', paymentMethods.join(','));
+        if (fiatCode) params.append('fiatCode', fiatCode.join(','));
+        if (fiatAmountRange?.min) params.append('minFiatAmount', fiatAmountRange.min);
+        if (fiatAmountRange?.max) params.append('maxFiatAmount', fiatAmountRange.max);
+        if (dateRange?.from) params.append('fromDate', dateRange.from);
+        if (dateRange?.to) params.append('toDate', dateRange.to);
+        if (search) params.append('search', search);
 
         const url = `/api/orders?${params.toString()}`;
         return this.get<OrderResponse>(url, headers);

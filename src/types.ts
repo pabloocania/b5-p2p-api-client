@@ -97,9 +97,23 @@ export interface CreateOrderRequest {
 }
 
 export interface GetOrdersParams {
-    status?: OrderStatus[];
+    status?: string[];
     user?: string;
     buyer?: string;
+    orderType?: string[];
+    blockchain?: string[];
+    tokenCode?: string[];
+    paymentMethods?: PaymentMethod[];
+    fiatCode?: string[];
+    fiatAmountRange?: {
+        min?: string;
+        max?: string;
+    };
+    dateRange?: {
+        from?: string;
+        to?: string;
+    };
+    search?: string;
 }
 
 export type TakeOrderRequest = TakeSellOrderRequest | TakeBuyOrderRequest;
