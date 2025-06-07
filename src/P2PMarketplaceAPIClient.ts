@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { CreateOrderRequest, CreateUserRequest, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, KioscoinUser, UsersResponse, PaymentMethod, GetOrdersParams } from './types';
+import { CreateOrderRequest, CreateUserRequest, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, KioscoinUser, UsersResponse, PaymentMethod, GetOrdersParams, CreateDisputeRequest, DisputesResponse } from './types';
 import { isPlainObject, camelCase, snakeCase, transform } from 'lodash';
 
 class P2PMarketplaceAPIClient {
@@ -226,6 +226,11 @@ class P2PMarketplaceAPIClient {
     public async getTransactionStatus(txHash: string, headers?: Record<string, string>): Promise<TransactionStatusResponse> {
         const url = `/api/blockchain/transactions/${txHash}`;
         return this.get<TransactionStatusResponse>(url, headers);
+    }
+
+    public async createDispute(request: CreateDisputeRequest, headers?: Record<string, string>): Promise<DisputesResponse> {
+        const url = '/api/disputes';
+        return this.post<DisputesResponse>(url, request, headers);
     }
 
 }

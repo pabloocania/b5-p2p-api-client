@@ -286,3 +286,27 @@ export interface KioscoinUser {
     timeToFiatSent?: number;
     reviews?: UserReview[];
 }
+
+export type DisputeReason = 'SELLER_NOT_LOCKING' | 'BUYER_FIAT_NOT_SENT' | 'SELLER_NOT_RELEASING';
+
+export interface CreateDisputeRequest {
+    orderId: string;
+    creatorId: string;
+    reason: DisputeReason;
+}
+
+export interface Dispute {
+    id?: string;
+    orderId: string;
+    buyerId?: string;
+    sellerId?: string;
+    orderType: OrderType;
+    creatorId: string;
+    status: 'OPEN' | 'CANCELED' | 'COMPLETED' | 'REFUND_FAILED';
+    resolution?: 'BUYER_REFUNDED' | 'SELLER_REFUNDED';
+    reason: DisputeReason;
+}
+
+export interface DisputesResponse {
+    disputes: Dispute[];
+}
