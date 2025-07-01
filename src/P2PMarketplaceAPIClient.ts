@@ -229,7 +229,7 @@ class P2PMarketplaceAPIClient {
     }
 
     public async createDispute(request: CreateDisputeRequest, headers?: Record<string, string>): Promise<DisputesResponse> {
-        const url = '/api/disputes';
+        const url = '/api/dispute';
         return this.post<DisputesResponse>(url, request, headers);
     }
 

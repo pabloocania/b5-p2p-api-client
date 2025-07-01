@@ -59,6 +59,10 @@ export interface Order {
     transactionsCount: number;
     chatId: string;
     userMetrics?: UserMetrics[];
+    buyerCanDispute?: boolean;
+    sellerCanDispute?: boolean;
+    buyerDisputed?: boolean;
+    sellerDisputed?: boolean;
 }
 
 export interface OrderResponse {
