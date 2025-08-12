@@ -314,3 +314,27 @@ export interface Dispute {
 export interface DisputesResponse {
     disputes: Dispute[];
 }
+
+
+export interface OrderOffer {
+    id: string;
+    type: OrderType;
+    tokenAmount: string;
+    exchangeMethods: PaymentMethod[];
+    tokenCode: string;
+    blockchain: string;
+    fiatCode: string;
+    fiatAmount: string;
+    title: string;
+    actionButtonDescription: string;
+    exchangeRateOfferId?: string;
+}
+
+export interface OrderOffersResponse {
+    offers: OrderOffer[];
+}
+
+export interface TransactionRequest {
+    offer: OrderOffer;
+    buyerAddress?: string;
+}

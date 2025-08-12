@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { CreateOrderRequest, CreateUserRequest, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, KioscoinUser, UsersResponse, PaymentMethod, GetOrdersParams, CreateDisputeRequest, DisputesResponse } from './types';
+import { CreateOrderRequest, CreateUserRequest, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, KioscoinUser, UsersResponse, PaymentMethod, GetOrdersParams, CreateDisputeRequest, DisputesResponse, OrderOffersResponse, TransactionRequest } from './types';
 import { isPlainObject, camelCase, snakeCase, transform } from 'lodash';
 
 class P2PMarketplaceAPIClient {
@@ -156,6 +156,18 @@ class P2PMarketplaceAPIClient {
         const url = '/api/dashboard/metrics';
         return this.get<DashboardMetricsResponse>(url, headers);
     }
+
+    public async getOrderOffers(headers?: Record<string, string>): Promise<OrderOffersResponse> {
+        const url = '/api/order_offers';
+        return this.get<OrderOffersResponse>(url, headers);
+    }
+
+    public async pointOfSaleTransact(request: TransactionRequest, headers?: Record<string, string>): Promise<any> {
+        const url = '/api/point_of_sale/transact';
+        return this.post<TransactionRequest>(url, request, headers);
+    }
+
+
 
     public async testLockFunds(order: Order, testParams?: TestEventParams, headers?: Record<string, string>) {
         const orderEvent: OrderLockedEvent = {
