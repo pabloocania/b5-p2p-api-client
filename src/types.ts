@@ -63,6 +63,8 @@ export interface Order {
     sellerCanDispute?: boolean;
     buyerDisputed?: boolean;
     sellerDisputed?: boolean;
+    escrowOrder?: EscrowOrderModel;
+    dispute?: Dispute[];
 }
 
 export interface OrderResponse {
@@ -71,6 +73,16 @@ export interface OrderResponse {
 
 export interface UsersResponse {
     users: KioscoinUser[]
+}
+
+export interface UserSettings {
+    preferredTokenCode?: string;
+    paymentMethods: PaymentMethod[];
+}
+
+export interface UpdateUserSettingsRequest {
+    userId: string;
+    settings: UserSettings;
 }
 
 export interface PaymentMethod {
@@ -337,4 +349,59 @@ export interface OrderOffersResponse {
 export interface TransactionRequest {
     offer: OrderOffer;
     buyerAddress?: string;
+}
+
+export type EscrowOrderStatus = 'NON_EXISTING' | 'LOCKED' | 'RELEASED' | 'REFUNDED';
+
+export interface EscrowOrderModel {
+    id: string;
+    timestamp?: string;
+    tokenContractAddress?: string;
+    buyerAddress?: string;
+    sellerAddress?: string;
+    amount?: string;
+    fee?: string;
+    status?: EscrowOrderStatus;
+    adminAction?: boolean;
+    token?: string;
+}
+
+export interface ExchangeRateOffer {
+    id: string;
+    tokenCode: string;
+    blockchainEnvironment: string;
+    fiatCode: string;
+    baseFiatRate: string;
+    offeredFiatRate: string;
+    margin: string;
+    validUntil: string;
+    isActive: boolean;
+    createdAt: string;
+}
+
+export interface KioscoinOperation {
+    orderType: OrderType;
+    tokenAmount: string;
+    fiatAmount: string;
+    tokenCode: string;
+    fiatCode: string;
+    blockchain: string;
+    userId: string;
+    username?: string;
+    buyerAddress?: string;
+    paymentMethods?: PaymentMethod[];
+    orderOffer?: OrderOffer;
+    exchangeRateOffer?: ExchangeRateOffer;
+}
+
+export type OperationErrorType = 'INVALID_TRANSACTION' | 'HAS_ACTIVE_ORDERS' | 'INSUFFICIENT_FUNDS' | 'UNKNOWN_ERROR';
+
+export interface OperationError {
+    type: OperationErrorType;
+    message: string;
+}
+
+export interface KioscoinOperationResponse {
+    error?: OperationError;
+    order?: Order;
 }

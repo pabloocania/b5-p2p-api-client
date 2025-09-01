@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { CreateOrderRequest, CreateUserRequest, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, KioscoinUser, UsersResponse, PaymentMethod, GetOrdersParams, CreateDisputeRequest, DisputesResponse, OrderOffersResponse, TransactionRequest } from './types';
+import { CreateOrderRequest, CreateUserRequest, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, KioscoinUser, UsersResponse, PaymentMethod, GetOrdersParams, CreateDisputeRequest, DisputesResponse, OrderOffersResponse, TransactionRequest, KioscoinOperationResponse, UpdateUserSettingsRequest } from './types';
 import { isPlainObject, camelCase, snakeCase, transform } from 'lodash';
 
 class P2PMarketplaceAPIClient {
@@ -137,6 +137,11 @@ class P2PMarketplaceAPIClient {
         return this.post<any>(url, rateUserRequest, headers);
     }
 
+    public async updateUserSettings(request: UpdateUserSettingsRequest, headers?: Record<string, string>): Promise<UsersResponse> {
+        const url = '/api/users/settings';
+        return this.post<UsersResponse>(url, request, headers);
+    }
+
     public async registerPushToken(registerRequest: PushNotificationsRegisterRequest, headers?: Record<string, string>): Promise<any> {
         const url = `/api/notifications/register-push`;
         return this.post<PushNotificationsRegisterRequest>(url, registerRequest, headers);
@@ -162,9 +167,9 @@ class P2PMarketplaceAPIClient {
         return this.get<OrderOffersResponse>(url, headers);
     }
 
-    public async pointOfSaleTransact(request: TransactionRequest, headers?: Record<string, string>): Promise<any> {
+    public async pointOfSaleTransact(request: TransactionRequest, headers?: Record<string, string>): Promise<KioscoinOperationResponse> {
         const url = '/api/point_of_sale/transact';
-        return this.post<TransactionRequest>(url, request, headers);
+        return this.post<KioscoinOperationResponse>(url, request, headers);
     }
 
 
