@@ -301,6 +301,7 @@ export interface KioscoinUser {
     timeToRelease?: number;
     timeToFiatSent?: number;
     reviews?: UserReview[];
+    settings?: UserSettings;
 }
 
 export type DisputeReason = 'SELLER_NOT_LOCKING' | 'BUYER_FIAT_NOT_SENT' | 'SELLER_NOT_RELEASING';
