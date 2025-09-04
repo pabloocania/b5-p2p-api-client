@@ -4,6 +4,7 @@ export interface User {
     username: string;
     email: string;
     idToken: string;
+    isAdmin: boolean;
 }
 
 // Define the UserContext interface

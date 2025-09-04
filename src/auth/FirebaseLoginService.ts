@@ -55,7 +55,8 @@ export class UserData {
         public readonly email: string,
         public readonly username: string,
         public readonly isEmailVerified: boolean,
-        public readonly idToken: string | null
+        public readonly idToken: string | null,
+        public readonly isAdmin: boolean
     ) { }
 
     static create(
@@ -63,14 +64,16 @@ export class UserData {
         email: string,
         username: string,
         isEmailVerified: boolean,
-        idToken: string | null
+        idToken: string | null,
+        isAdmin: boolean
     ): UserData {
         return new UserData(
             id,
             email,
             username,
             isEmailVerified,
-            idToken
+            idToken,
+            isAdmin
         );
     }
 
@@ -80,7 +83,8 @@ export class UserData {
             this.email,
             this.username,
             true,
-            this.idToken
+            this.idToken,
+            this.isAdmin
         );
     }
 }
@@ -92,15 +96,16 @@ export class AuthResult {
         public readonly user: KioscoinUser | null,
         public readonly userData: UserData | null,
         public readonly error: string | null,
-        public readonly provider: AuthProvider | null
+        public readonly provider: AuthProvider | null,
+        public readonly isAdmin: boolean
     ) { }
 
     static success(user: KioscoinUser, userData: UserData, provider: AuthProvider): AuthResult {
-        return new AuthResult(true, user, userData, null, provider);
+        return new AuthResult(true, user, userData, null, provider, userData.isAdmin);
     }
 
     static failure(error: string): AuthResult {
-        return new AuthResult(false, null, null, error, null);
+        return new AuthResult(false, null, null, error, null, false);
     }
 }
 
@@ -220,7 +225,8 @@ export class FirebaseUnifiedService implements LoginService {
                     id: userCredential.user.uid,
                     username: backendUser.username || '',
                     email: userCredential.user.email || '',
-                    idToken: idToken
+                    idToken: idToken,
+                    isAdmin: backendUser.admin || false
                 });
                 return authResult;
             } else {
@@ -460,7 +466,8 @@ export class FirebaseUnifiedService implements LoginService {
             user.email || '',
             backendUser.username || '',
             user.emailVerified,
-            idToken
+            idToken,
+            backendUser.admin || false
         );
         return AuthResult.success(backendUser, userData, provider);
     }
