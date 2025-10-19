@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { CreateOrderRequest, CreateUserRequest, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, KioscoinUser, UsersResponse, PaymentMethod, GetOrdersParams, CreateDisputeRequest, DisputesResponse, OrderOffersResponse, TransactionRequest, KioscoinOperationResponse, UpdateUserSettingsRequest } from './types';
+import { CreateOrderRequest, CreateUserRequest, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, KioscoinUser, UsersResponse, PaymentMethod, GetOrdersParams, CreateDisputeRequest, DisputesResponse, OrderOffersResponse, TransactionRequest, KioscoinOperationResponse, UpdateUserSettingsRequest, NotificationsResponse } from './types';
 import { isPlainObject, camelCase, snakeCase, transform } from 'lodash';
 
 class P2PMarketplaceAPIClient {
@@ -145,6 +145,16 @@ class P2PMarketplaceAPIClient {
     public async registerPushToken(registerRequest: PushNotificationsRegisterRequest, headers?: Record<string, string>): Promise<any> {
         const url = `/api/notifications/register-push`;
         return this.post<PushNotificationsRegisterRequest>(url, registerRequest, headers);
+    }
+
+    public async listNotifications(limit: number = 10, offset: number = 0, headers?: Record<string, string>): Promise<NotificationsResponse> {
+        const url = `/api/notifications?limit=${limit}&offset=${offset}`;
+        return this.get<NotificationsResponse>(url, headers);
+    }
+
+    public async markNotificationAsRead(notificationId: string, headers?: Record<string, string>): Promise<NotificationsResponse> {
+        const url = `/api/notifications/${notificationId}/read`;
+        return this.post<any>(url, {}, headers);
     }
 
     public async getConfig<T>(): Promise<ConfigResponse<T>> {

@@ -406,3 +406,53 @@ export interface KioscoinOperationResponse {
     error?: OperationError;
     order?: Order;
 }
+
+export type MessageContentType = 'TEXT' | 'ACTION' | 'EVENT' | 'NOTIFICATION';
+
+export interface MessageContentBase {
+    type: MessageContentType;
+}
+
+export interface MessageContentText extends MessageContentBase {
+    type: 'TEXT';
+    text: string;
+}
+
+export interface MessageContentAction extends MessageContentBase {
+    type: 'ACTION';
+    content: string;
+}
+
+export interface MessageContentEvent extends MessageContentBase {
+    type: 'EVENT';
+    event: OrderEvent;
+}
+
+export interface MessageContentNotification extends MessageContentBase {
+    type: 'NOTIFICATION';
+    notification: NotificationDto;
+}
+
+export type MessageContent =
+    | MessageContentText
+    | MessageContentAction
+    | MessageContentEvent
+    | MessageContentNotification;
+
+export interface Message {
+    sender: string;
+    timestamp: number;
+    content: MessageContent;
+}
+
+export interface NotificationDto {
+    id: string;
+    userId: string;
+    message: Message;
+    createdAt: string;
+    readAt?: string | null;
+}
+
+export interface NotificationsResponse {
+    notifications: NotificationDto[];
+}
