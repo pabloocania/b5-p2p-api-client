@@ -1,10 +1,17 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { CreateOrderRequest, CreateUserRequest, Order, OrderLockedEvent, OrderResponse, ReleaseOrderEvent as OrderReleasedEvent, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, KioscoinUser, UsersResponse, PaymentMethod, GetOrdersParams, CreateDisputeRequest, DisputesResponse, OrderOffersResponse, TransactionRequest, KioscoinOperationResponse, UpdateUserSettingsRequest, NotificationsResponse } from './types';
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
+import { CreateOrderRequest, CreateUserRequest, Order, OrderResponse, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, UsersResponse, GetOrdersParams, CreateDisputeRequest, DisputesResponse, OrderOffersResponse, TransactionRequest, KioscoinOperationResponse, UpdateUserSettingsRequest, NotificationsResponse, VerifyEmailRequest } from './types';
+import { AuthTokenProvider } from './auth/AuthTokenProvider';
 import { isPlainObject, camelCase, snakeCase, transform } from 'lodash';
+
+export interface RequestConfigWithRetry extends AxiosRequestConfig {
+    _retry?: boolean;
+}
 
 class P2PMarketplaceAPIClient {
     private readonly client: AxiosInstance;
     private readonly defaultHeaders: Record<string, string>;
+    private authTokenProvider?: AuthTokenProvider;
+    private refreshTokenPromise?: Promise<string | null>;
 
     constructor(baseURL: string, timeout: number = 30000) {
         this.client = axios.create({
@@ -18,11 +25,28 @@ class P2PMarketplaceAPIClient {
         };
 
         // Add a request interceptor to transform request data to snake_case
-        this.client.interceptors.request.use((config) => {
+        this.client.interceptors.request.use(async (config) => {
             if (config.data) {
                 config.data = toSnakeCase(config.data);
             }
-            return config;
+            const provider = this.authTokenProvider;
+            if (!provider) {
+                return config;
+            }
+
+            return provider
+                .getToken()
+                .then((token) => {
+                    if (token) {
+                        config.headers = config.headers ?? {};
+                        config.headers['Authorization'] = `Bearer ${token}`;
+                    }
+                    return config;
+                })
+                .catch((error) => {
+                    console.warn('[P2PMarketplaceAPIClient] Failed to obtain auth token before request:', error);
+                    return config;
+                });
         }, (error) => {
             return Promise.reject(error);
         });
@@ -33,9 +57,40 @@ class P2PMarketplaceAPIClient {
                 response.data = toCamelCase(response.data);
             }
             return response;
-        }, (error) => {
-            return Promise.reject(error);
+        }, async (error: AxiosError) => {
+            const { response, config } = error;
+            if (!this.authTokenProvider || response?.status !== 401 || !config) {
+                return Promise.reject(error);
+            }
+
+            const originalRequest = config as RequestConfigWithRetry;
+            if (originalRequest._retry) {
+                return Promise.reject(error);
+            }
+
+            originalRequest._retry = true;
+
+            try {
+                const newToken = await this.getRefreshedToken();
+                if (!newToken) {
+                    return Promise.reject(error);
+                }
+
+                originalRequest.headers = originalRequest.headers ?? {};
+                originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
+                return this.client(originalRequest);
+            } catch (refreshError) {
+                if (this.authTokenProvider?.onRefreshFailure) {
+                    this.authTokenProvider.onRefreshFailure(refreshError);
+                }
+                return Promise.reject(error);
+            }
         });
+    }
+
+    setAuthTokenProvider(provider?: AuthTokenProvider) {
+        this.authTokenProvider = provider;
+        this.refreshTokenPromise = undefined;
     }
 
     private mergeHeaders(customHeaders?: Record<string, string>): Record<string, string> {
@@ -46,6 +101,28 @@ class P2PMarketplaceAPIClient {
         return {
             headers: this.mergeHeaders(headers)
         };
+    }
+
+    private async getRefreshedToken(): Promise<string | null> {
+        if (!this.authTokenProvider) {
+            return null;
+        }
+
+        if (!this.refreshTokenPromise) {
+            this.refreshTokenPromise = this.authTokenProvider
+                .refreshToken()
+                .catch((error) => {
+                    if (this.authTokenProvider?.onRefreshFailure) {
+                        this.authTokenProvider.onRefreshFailure(error);
+                    }
+                    throw error;
+                })
+                .finally(() => {
+                    this.refreshTokenPromise = undefined;
+                });
+        }
+
+        return this.refreshTokenPromise;
     }
 
     async get<T>(url: string, headers?: Record<string, string>): Promise<T> {
@@ -142,6 +219,11 @@ class P2PMarketplaceAPIClient {
         return this.post<UsersResponse>(url, request, headers);
     }
 
+    public async verifyUserEmail(request: VerifyEmailRequest, headers?: Record<string, string>): Promise<UsersResponse> {
+        const url = '/api/users/verify_email';
+        return this.post<UsersResponse>(url, request, headers);
+    }
+
     public async registerPushToken(registerRequest: PushNotificationsRegisterRequest, headers?: Record<string, string>): Promise<any> {
         const url = `/api/notifications/register-push`;
         return this.post<PushNotificationsRegisterRequest>(url, registerRequest, headers);
@@ -182,58 +264,6 @@ class P2PMarketplaceAPIClient {
         return this.post<KioscoinOperationResponse>(url, request, headers);
     }
 
-
-
-    public async testLockFunds(order: Order, testParams?: TestEventParams, headers?: Record<string, string>) {
-        const orderEvent: OrderLockedEvent = {
-            type: "LOCKED",
-            orderId: order.id ?? "",
-            buyerAddress: order.buyerAddress ?? "",
-            amount: order.amount?.toString() ?? "0",
-            transaction: {
-                hash: "0x976d8c61b958e286d907a2e1c5ffde8c9316800ab4de1396a54927a39dc533a2",
-            },
-            tokenContractAddress: "0xee5e8291b551603a19ef41eea69ae49592ed14f8",
-            buyerHash:
-                "02809d5cc2ec09a7503ef77358654a5bfc958e08c04ecb33f412884c0933be68",
-            sellerAddress: "0x2A4E89D18C2742FEDC65444d339cC5fAF3dE4dF1",
-            sellerHash:
-                "4b3560738b8e3cb8a0a30ac664b12de2ace977c62ade94bc08a37fe5b93bf34b",
-            fee: "30000000000000000",
-            timestamp: new Date().toISOString(),
-        };
-
-        const url = "api/events/simulate/lock"
-        try {
-            await this.post<undefined>(url, orderEvent, headers);
-        } catch (error) {
-            console.error("Error locking funds:", error);
-            throw new Error("Failed to lock funds");
-        }
-    }
-
-    public async testReleaseFunds(order: Order, testParams?: TestEventParams, headers?: Record<string, string>) {
-        const releaseOrderEvent: OrderReleasedEvent = {
-            type: "RELEASED",
-            orderId: order.id ?? "",
-            buyerAddress: order.buyerAddress ?? "",
-            amount: order.amount?.toString() ?? "0",
-            transaction: {
-                hash: "0xeab4797bf0e13dff0bda481503a544698127c5f97dd826c465ebdb41bcfec3f5",
-            },
-            tokenContractAddress: "0xee5e8291b551603a19ef41eea69ae49592ed14f8",
-            adminAction: true,
-            timestamp: new Date().toISOString(),
-        };
-
-        const url = "api/events/simulate/release"
-        try {
-            await this.post<undefined>(url, releaseOrderEvent, headers);
-        } catch (error) {
-            console.error("Error releasing funds:", error);
-            throw new Error("Failed to release funds");
-        }
-    }
 
     public async releaseFunds(order: Order, testParams?: TestEventParams, headers?: Record<string, string>): Promise<string> {
         const body = {

@@ -1,3 +1,5 @@
+import { AxiosRequestConfig } from "axios";
+
 export type OrderType = 'SELL' | 'BUY';
 
 export type OrderStatus =
@@ -76,13 +78,18 @@ export interface UsersResponse {
 }
 
 export interface UserSettings {
-    preferredTokenCode?: string;
+    preferredTokenCode?: string | null;
     paymentMethods: PaymentMethod[];
+    hasVerified?: boolean;
 }
 
 export interface UpdateUserSettingsRequest {
     userId: string;
     settings: UserSettings;
+}
+
+export interface VerifyEmailRequest {
+    loginId: string;
 }
 
 export interface PaymentMethod {

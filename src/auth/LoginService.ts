@@ -1,5 +1,5 @@
 import P2PMarketplaceAPIClient from "../P2PMarketplaceAPIClient";
-import { AuthResult } from "./FirebaseLoginService";
+import { AuthResult, FirebaseService } from "./FirebaseLoginService";
 
 export type LoginProvider = 'firebase' | 'custom';
 
@@ -21,13 +21,14 @@ export interface FirebaseLoginServiceConfig {
         url: string;
         handleCodeInApp: boolean;
     };
+    emailVerificationUrl?: string;
+    emailVerificationContinueUrl?: string;
 }
 
 export function createLoginService(config: LoginServiceConfig): LoginService {
     const { provider, apiClient } = config;
     if (provider === 'firebase') {
-        const { FirebaseUnifiedService } = require('../FirebaseLoginService');
-        return new FirebaseUnifiedService(apiClient, config.firebase);
+        return new FirebaseService(apiClient, config.firebase);
     }
     throw new Error(`Unsupported login provider: ${provider}`);
 }
