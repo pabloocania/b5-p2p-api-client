@@ -92,6 +92,15 @@ export interface VerifyEmailRequest {
     loginId: string;
 }
 
+export interface CreateSessionRequest {
+    idToken: string;
+}
+
+export interface CreateSessionResponse {
+    success: boolean;
+    userId?: string;
+}
+
 export interface PaymentMethod {
     type: string;
     alias?: string;

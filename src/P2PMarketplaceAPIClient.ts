@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
-import { CreateOrderRequest, CreateUserRequest, Order, OrderResponse, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, UsersResponse, GetOrdersParams, CreateDisputeRequest, DisputesResponse, OrderOffersResponse, TransactionRequest, KioscoinOperationResponse, UpdateUserSettingsRequest, NotificationsResponse, VerifyEmailRequest } from './types';
+import { CreateOrderRequest, CreateUserRequest, Order, OrderResponse, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, UsersResponse, GetOrdersParams, CreateDisputeRequest, DisputesResponse, OrderOffersResponse, TransactionRequest, KioscoinOperationResponse, UpdateUserSettingsRequest, NotificationsResponse, VerifyEmailRequest, CreateSessionRequest, CreateSessionResponse } from './types';
 import { AuthTokenProvider } from './auth/AuthTokenProvider';
 import { isPlainObject, camelCase, snakeCase, transform } from 'lodash';
 
@@ -17,6 +17,7 @@ class P2PMarketplaceAPIClient {
         this.client = axios.create({
             baseURL,
             timeout,
+            withCredentials: true, // Enable sending/receiving cookies
         });
 
         this.defaultHeaders = {
@@ -288,6 +289,42 @@ class P2PMarketplaceAPIClient {
     public async createDispute(request: CreateDisputeRequest, headers?: Record<string, string>): Promise<DisputesResponse> {
         const url = '/api/dispute';
         return this.post<DisputesResponse>(url, request, headers);
+    }
+
+    // Session Management
+
+    /**
+     * Create or refresh a session with Firebase ID token
+     * Sets a session cookie that will be used for WebSocket authentication
+     */
+    public async createSession(request: CreateSessionRequest, headers?: Record<string, string>): Promise<CreateSessionResponse> {
+        const url = '/api/session';
+        return this.post<CreateSessionResponse>(url, request, headers);
+    }
+
+    /**
+     * Check if the current session is valid
+     * Returns session status and userId if valid
+     */
+    public async getSessionStatus(headers?: Record<string, string>): Promise<CreateSessionResponse> {
+        const url = '/api/session';
+        return this.get<CreateSessionResponse>(url, headers);
+    }
+
+    /**
+     * Clear the session cookie (logout)
+     * Destroys the session on the backend
+     */
+    public async clearSession(headers?: Record<string, string>): Promise<{ success: boolean }> {
+        const url = '/api/session';
+        const config = this.createConfig(headers);
+        try {
+            const response = await this.client.delete<{ success: boolean }>(url, config);
+            return response.data;
+        } catch (error) {
+            console.error(`DELETE request to ${url} failed:`, error);
+            throw error;
+        }
     }
 
 }
