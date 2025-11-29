@@ -289,6 +289,7 @@ export interface UserMetrics {
     avgTimeToLock: number;
     avgTimeToRelease: number;
     avgTimeToFiatSent: number;
+    hasVerified: boolean;
 }
 
 export interface UserReview {
