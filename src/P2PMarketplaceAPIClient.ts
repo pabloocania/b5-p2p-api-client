@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
-import { CreateOrderRequest, CreateUserRequest, Order, OrderResponse, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, UsersResponse, GetOrdersParams, CreateDisputeRequest, DisputesResponse, OrderOffersResponse, TransactionRequest, KioscoinOperationResponse, UpdateUserSettingsRequest, NotificationsResponse, VerifyEmailRequest, CreateSessionRequest, CreateSessionResponse } from './types';
+import { CreateOrderRequest, CreateUserRequest, Order, OrderResponse, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, UsersResponse, GetOrdersParams, CreateDisputeRequest, DisputesResponse, OrderOffersResponse, TransactionRequest, KioscoinOperationResponse, UpdateUserSettingsRequest, NotificationsResponse, VerifyEmailRequest, CreateSessionRequest, CreateSessionResponse, SaveOpsLogRequest, SaveOpsLogResponse } from './types';
 import { AuthTokenProvider } from './auth/AuthTokenProvider';
 import { isPlainObject, camelCase, snakeCase, transform } from 'lodash';
 
@@ -289,6 +289,19 @@ class P2PMarketplaceAPIClient {
     public async createDispute(request: CreateDisputeRequest, headers?: Record<string, string>): Promise<DisputesResponse> {
         const url = '/api/dispute';
         return this.post<DisputesResponse>(url, request, headers);
+    }
+
+    // OpsLog
+
+    /**
+     * Save a UserOperation receipt to the database
+     * @param request - The SaveOpsLogRequest containing chainId, userOp, and optional orderId/opsType
+     * @param headers - Optional custom headers
+     * @returns SaveOpsLogResponse with the saved log id and success status
+     */
+    public async saveOpsLog(request: SaveOpsLogRequest, headers?: Record<string, string>): Promise<SaveOpsLogResponse> {
+        const url = '/api/ops/log';
+        return this.post<SaveOpsLogResponse>(url, request, headers);
     }
 
     // Session Management

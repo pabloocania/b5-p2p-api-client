@@ -473,3 +473,18 @@ export interface NotificationDto {
 export interface NotificationsResponse {
     notifications: NotificationDto[];
 }
+
+// OpsLog types
+export type OpsType = 'LOCK' | 'RELEASE' | 'TRANSFER';
+
+export interface SaveOpsLogRequest {
+    chainId: number;
+    userOp: Record<string, unknown>;
+    orderId?: string;
+    opsType?: OpsType;
+}
+
+export interface SaveOpsLogResponse {
+    id: string;
+    success: boolean;
+}
