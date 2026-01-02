@@ -221,6 +221,32 @@ export interface ReleaseOrderEvent {
     timestamp: string;
 }
 
+export interface OrderCanceledEvent {
+    type: string;
+    orderId: string;
+    buyerAddress: string;
+    amount?: string;
+    transaction?: { hash: string } | null;
+    tokenContractAddress: string;
+    cancelCreatorId: string;
+    previousStatus: string;
+    timestamp: string;
+    blockchain?: string;
+}
+
+export interface OrderDisputedEvent {
+    type: string;
+    orderId: string;
+    buyerAddress: string;
+    amount?: string;
+    transaction?: { hash: string } | null;
+    tokenContractAddress: string;
+    disputeCreatorId: string;
+    reason: string;
+    timestamp: string;
+    blockchain?: string;
+}
+
 export interface OrderEvent {
     orderId: string;
     timestamp: string;

@@ -291,6 +291,21 @@ class P2PMarketplaceAPIClient {
         return this.post<DisputesResponse>(url, request, headers);
     }
 
+    /**
+     * Cancel/delete an order by its ID
+     * Only allowed for orders in PENDING or WAITING_PAYMENT status
+     */
+    public async cancelOrder(orderId: string, headers?: Record<string, string>): Promise<void> {
+        const url = `/api/orders/${orderId}`;
+        const config = this.createConfig(headers);
+        try {
+            await this.client.delete(url, config);
+        } catch (error) {
+            console.error(`DELETE request to ${url} failed:`, error);
+            throw error;
+        }
+    }
+
     // OpsLog
 
     /**
