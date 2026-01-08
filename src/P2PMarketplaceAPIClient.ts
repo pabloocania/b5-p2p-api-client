@@ -59,6 +59,11 @@ class P2PMarketplaceAPIClient {
             }
             return response;
         }, async (error: AxiosError) => {
+            // Transform error response data to camelCase for consistency
+            if (error.response?.data) {
+                error.response.data = toCamelCase(error.response.data);
+            }
+
             const { response, config } = error;
             if (!this.authTokenProvider || response?.status !== 401 || !config) {
                 return Promise.reject(error);
@@ -128,24 +133,14 @@ class P2PMarketplaceAPIClient {
 
     async get<T>(url: string, headers?: Record<string, string>): Promise<T> {
         const config = this.createConfig(headers);
-        try {
-            const response = await this.client.get<T>(url, config);
-            return response.data;
-        } catch (error) {
-            console.error(`GET request to ${url} failed:`, error);
-            throw error;
-        }
+        const response = await this.client.get<T>(url, config);
+        return response.data;
     }
 
     async post<T>(url: string, data: any, headers?: Record<string, string>): Promise<T> {
         const config = this.createConfig(headers);
-        try {
-            const response = await this.client.post<T>(url, data, config);
-            return response.data;
-        } catch (error) {
-            console.error(`POST request to ${url} failed:`, error);
-            throw error;
-        }
+        const response = await this.client.post<T>(url, data, config);
+        return response.data;
     }
 
     public async getOrders(props: GetOrdersParams, headers?: Record<string, string>): Promise<OrderResponse> {
@@ -273,12 +268,7 @@ class P2PMarketplaceAPIClient {
         };
 
         const url = "api/orders/release"
-        try {
-            return await this.post<string>(url, body, headers);
-        } catch (error) {
-            console.error("Error releasing funds:", error);
-            throw new Error("Failed to release funds");
-        }
+        return await this.post<string>(url, body, headers);
     }
 
     public async getTransactionStatus(txHash: string, headers?: Record<string, string>): Promise<TransactionStatusResponse> {
@@ -298,12 +288,7 @@ class P2PMarketplaceAPIClient {
     public async cancelOrder(orderId: string, headers?: Record<string, string>): Promise<void> {
         const url = `/api/orders/${orderId}`;
         const config = this.createConfig(headers);
-        try {
-            await this.client.delete(url, config);
-        } catch (error) {
-            console.error(`DELETE request to ${url} failed:`, error);
-            throw error;
-        }
+        await this.client.delete(url, config);
     }
 
     // OpsLog
@@ -346,13 +331,8 @@ class P2PMarketplaceAPIClient {
     public async clearSession(headers?: Record<string, string>): Promise<{ success: boolean }> {
         const url = '/api/session';
         const config = this.createConfig(headers);
-        try {
-            const response = await this.client.delete<{ success: boolean }>(url, config);
-            return response.data;
-        } catch (error) {
-            console.error(`DELETE request to ${url} failed:`, error);
-            throw error;
-        }
+        const response = await this.client.delete<{ success: boolean }>(url, config);
+        return response.data;
     }
 
 }
