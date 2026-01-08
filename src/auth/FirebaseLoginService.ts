@@ -420,11 +420,9 @@ export class FirebaseService implements LoginService {
             const user = userCredential.user;
             const idToken = await user.getIdToken();
 
-            // Get or create user in your Kotlin backend
-            const backendUser = await this.getUserFromBackend(user.uid, idToken);
+            const backendUser = await this.getOrCreateUserInBackend(user, idToken);
             if (backendUser) {
                 const syncedBackendUser = await this.ensureBackendVerification(user, backendUser, idToken);
-                // Use the new helper method
                 return this._createSuccessAuthResult(user, syncedBackendUser, AuthProvider.GOOGLE, idToken);
             } else {
                 return AuthResult.failure('Failed to get or create user in backend');
@@ -662,5 +660,22 @@ export class FirebaseService implements LoginService {
             console.error('Error creating user in backend:', error);
             return null;
         }
+    }
+
+    private async getOrCreateUserInBackend(
+        user: User,
+        idToken: string
+    ): Promise<KioscoinUser | null> {
+        // Try to get existing user from backend
+        const existingUser = await this.getUserFromBackend(user.uid, idToken);
+        if (existingUser) {
+            return existingUser;
+        }
+
+        // User doesn't exist, create them (first-time social sign-in)
+        const username = user.email?.split('@')[0]
+            || `user_${user.uid.substring(0, 8)}`;
+
+        return this.createUserInBackend(user.uid, username, idToken);
     }
 }
