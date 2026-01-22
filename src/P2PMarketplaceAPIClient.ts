@@ -190,9 +190,9 @@ class P2PMarketplaceAPIClient {
         return this.post<OrderResponse>(url, order, headers);
     }
 
-    public async updateOrder(updateRequest: UpdateOrderRequest, headers?: Record<string, string>): Promise<Order> {
+    public async updateOrder(updateRequest: UpdateOrderRequest, headers?: Record<string, string>): Promise<OrderResponse> {
         const url = '/api/orders/update';
-        return this.post<Order>(url, updateRequest, headers);
+        return this.post<OrderResponse>(url, updateRequest, headers);
     }
 
     public async createUser(user: CreateUserRequest, headers?: Record<string, string>): Promise<UsersResponse> {
