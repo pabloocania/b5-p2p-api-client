@@ -47,6 +47,7 @@ export interface Order {
     fiatCode: string;
     paymentMethods?: PaymentMethod[];
     createdAt?: string; // ISO 8601 string
+    updatedAt?: string; // ISO 8601 string
     transaction?: string;
     buyerHash?: string;
     sellerHash?: string;
