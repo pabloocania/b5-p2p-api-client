@@ -73,6 +73,20 @@ export interface OrderResponse {
     orders: Order[]
 }
 
+export type OrderSecretRole = 'BUYER' | 'SELLER';
+
+export interface OrderSecretResponse {
+    orderId: string;
+    role: OrderSecretRole;
+    secret: string;
+}
+
+export interface OrderEscrowSecretsResponse {
+    orderId: string;
+    buyerSecret: string;
+    sellerSecret: string;
+}
+
 export interface UsersResponse {
     users: KioscoinUser[]
 }

@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
-import { CreateOrderRequest, CreateUserRequest, Order, OrderResponse, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, UsersResponse, GetOrdersParams, CreateDisputeRequest, DisputesResponse, OrderOffersResponse, TransactionRequest, KioscoinOperationResponse, UpdateUserSettingsRequest, NotificationsResponse, VerifyEmailRequest, CreateSessionRequest, CreateSessionResponse, SaveOpsLogRequest, SaveOpsLogResponse } from './types';
+import { CreateOrderRequest, CreateUserRequest, Order, OrderResponse, OrderEscrowSecretsResponse, OrderSecretResponse, TakeOrderRequest, TestEventParams, UpdateOrderRequest, TransactionStatusResponse, RateUserRequest, OrderEventsResponse, PushNotificationsRegisterRequest, ConfigResponse, DashboardMetricsResponse, UsersResponse, GetOrdersParams, CreateDisputeRequest, DisputesResponse, OrderOffersResponse, TransactionRequest, KioscoinOperationResponse, UpdateUserSettingsRequest, NotificationsResponse, VerifyEmailRequest, CreateSessionRequest, CreateSessionResponse, SaveOpsLogRequest, SaveOpsLogResponse } from './types';
 import { AuthTokenProvider } from './auth/AuthTokenProvider';
 import { isPlainObject, camelCase, snakeCase, transform } from 'lodash';
 
@@ -178,6 +178,16 @@ class P2PMarketplaceAPIClient {
     public async getOrderById(id: string, headers?: Record<string, string>): Promise<OrderResponse> {
         const url = `/api/orders/${id}`;
         return this.get<OrderResponse>(url, headers);
+    }
+
+    public async getOrderSecret(orderId: string, headers?: Record<string, string>): Promise<OrderSecretResponse> {
+        const url = `/api/orders/${orderId}/secret`;
+        return this.get<OrderSecretResponse>(url, headers);
+    }
+
+    public async getEscrowSecretsForSeller(orderId: string, headers?: Record<string, string>): Promise<OrderEscrowSecretsResponse> {
+        const url = `/api/orders/${orderId}/escrow-secrets`;
+        return this.get<OrderEscrowSecretsResponse>(url, headers);
     }
 
     public async createOrder(order: CreateOrderRequest, headers?: Record<string, string>): Promise<OrderResponse> {
